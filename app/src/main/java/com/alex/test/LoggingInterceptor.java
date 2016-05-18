@@ -2,12 +2,15 @@ package com.alex.test;
 
 import android.util.Log;
 
+import com.squareup.okhttp.Interceptor;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
+
 import java.io.IOException;
 
-import okhttp3.Interceptor;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import okio.Buffer;
+
 
 //https://github.com/square/retrofit/issues/1072#
 
@@ -33,7 +36,7 @@ public class LoggingInterceptor implements Interceptor {
 
         String bodyString = response.body().string();
 
-        Log.d("TAG", "response" + "\n" + responseLog + "\n" + bodyString);
+        Log.d("TAG", "response log2222222" + "\n" + responseLog + "\n" + "response body1111111111" + bodyString);
 
         return response.newBuilder()
                 .body(ResponseBody.create(response.body().contentType(), bodyString))
@@ -41,11 +44,9 @@ public class LoggingInterceptor implements Interceptor {
         //return response;
     }
 
-    private String bodyToString(Request request) {
-        return request.toString();
-    }
 
-   /* public static String bodyToString(final Request request) {
+
+    public static String bodyToString(final Request request) {
         try {
             final Request copy = request.newBuilder().build();
             final Buffer buffer = new Buffer();
@@ -55,7 +56,7 @@ public class LoggingInterceptor implements Interceptor {
             return "did not work";
         }
     }
-*/
+
 
 }
 

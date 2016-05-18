@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response<Void> response) {
                 System.out.println("response = [" + response.headers().toString() + "]");
+                tv.setText(response.headers().toString());
             }
 
             @Override
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void printResponse(Response<Object> response) {
+
         Log.d("MainActivity", "Status Code = " + response.code());
         if (response.isSuccess()) {
             // request successful (status code 200, 201)

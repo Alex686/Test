@@ -24,6 +24,8 @@ import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
 
+//import com.squareup.okhttp.HttpLoggingInterceptor;
+
 
 public class Connector {
 
@@ -36,6 +38,7 @@ public class Connector {
 
 
             OkHttpClient okClient =getUnsafeOkHttpClient() ;
+            okClient.interceptors().add((Interceptor) new LoggingInterceptor());
 
 
 
@@ -43,6 +46,7 @@ public class Connector {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Response response = chain.proceed(chain.request());
+
                     return response;
                 }
             });
@@ -52,7 +56,7 @@ public class Connector {
                     .client(okClient)
 
                     //нащёл в интернете, но куча ошибок https://github.com/square/retrofit/issues/1554
-                    //.addConverterFactory(new NullOnEmptyConverterFactory())
+                    .addConverterFactory(new NullOnEmptyConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -121,11 +125,16 @@ public class Connector {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 
+
             OkHttpClient okHttpClient = new OkHttpClient();
+           // okHttpClient.interceptors().add(new LoggingInterceptor(),interceptor);
+
+
 
                      //не понимаю что за logger      https://github.com/square/okhttp/wiki/Interceptors
                     //первый вариант вроде без ошибок, но не работает   https://github.com/square/retrofit/issues/1072
-                    //okHttpClient.interceptors().add((Interceptor) new LoggingInterceptor());
+                    okHttpClient.interceptors().add((Interceptor) new LoggingInterceptor());
+
                     //как вариант не знаю почему не работает
                     //okHttpClient.interceptors().add(interceptor);
             okHttpClient.setSslSocketFactory(sslSocketFactory);
