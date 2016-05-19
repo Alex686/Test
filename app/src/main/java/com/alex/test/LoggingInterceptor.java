@@ -38,6 +38,17 @@ public class LoggingInterceptor implements Interceptor {
 
         Log.d("TAG", "response log2222222" + "\n" + responseLog + "\n" + "response body1111111111" + bodyString);
 
+
+/*
+        //помещение Jsession id в переменную.
+        Map<String, List<String>> map = response.headers().toMultimap();
+        String setCookie = map.get("Set-Cookie").toString();
+        String Jsessionid = setCookie.substring(12, 44);
+        System.out.println("JSESSIONID: " + Jsessionid);
+*/
+
+
+
         return response.newBuilder()
                 .body(ResponseBody.create(response.body().contentType(), bodyString))
                 .build();
