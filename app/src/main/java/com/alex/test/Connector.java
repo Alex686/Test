@@ -1,11 +1,14 @@
 package com.alex.test;
 
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Response;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
@@ -15,52 +18,39 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit.Call;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.http.FieldMap;
-import retrofit.http.FormUrlEncoded;
-import retrofit.http.GET;
-import retrofit.http.POST;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 //import com.squareup.okhttp.HttpLoggingInterceptor;
 
 
 public class Connector {
 
+    public static final String COOKIE = "Cookie";
     private static GitApiInterface gitApiInterface ;
     public static final String URL = "https://revelreports.mera.ru";
 
-    public static GitApiInterface conn() {
+    public static GitApiInterface conn(final String sessionId) {
         if (gitApiInterface == null) {
 
 
+            OkHttpClient okClient =getUnsafeOkHttpClient(sessionId) ;
+//            okClient.interceptors().add((Interceptor) new LoggingInterceptor());
 
-            OkHttpClient okClient =getUnsafeOkHttpClient() ;
-            okClient.interceptors().add((Interceptor) new LoggingInterceptor());
-
-
-
-            okClient.interceptors().add(new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    Response response = chain.proceed(chain.request());
-
-                    return response;
-                }
-            });
 
             Retrofit client = new Retrofit.Builder()
                     .baseUrl(URL)
                     .client(okClient)
 
+
                     //нащёл в интернете, но куча ошибок https://github.com/square/retrofit/issues/1554
-                    .addConverterFactory(new NullOnEmptyConverterFactory())
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(JacksonConverterFactory.create())
                     .build();
 
-            //.addConverter(String.class, new ToStringConverter())
 
             gitApiInterface = client.create(GitApiInterface.class);
         }
@@ -74,23 +64,9 @@ public class Connector {
        Call<Void> login(@FieldMap Map<String, String> map);
 
         @GET("/reporting/rest/saiku/session")
-        Call<Object> getSessionInfo();
-
-/*
-        @Headers("User-Agent: Retrofit2.0Tutorial-App")
-        @GET("/search/users")
-        Call<GitResult> getUsersNamedTom(@Query("q") String name);
-
-        @POST("/user/create")
-        Call<Item> createUser(@Body Item user);
-        //Call<GitResult> createUser(@Field("name") String name, @Field("email") String email);
-        // Call<Item> createUser(@Body String name, @Body String email);
-
-        @PUT("/user/{id}/update")
-        Call<Item> updateUser(@Path("id") String id , @Body Item user);
-*/
+        Call<Map<String, Object>> getSessionInfo();
     }
-    public static OkHttpClient getUnsafeOkHttpClient() {
+    public static OkHttpClient getUnsafeOkHttpClient(final String sessionId) {
 
         try {
             // Create a trust manager that does not validate certificate chains
@@ -109,7 +85,7 @@ public class Connector {
 
                 @Override
                 public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return null;
+                    return new X509Certificate[0];
                 }
             }};
 
@@ -121,24 +97,19 @@ public class Connector {
             final SSLSocketFactory sslSocketFactory = sslContext
                     .getSocketFactory();
 
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-
-
-            OkHttpClient okHttpClient = new OkHttpClient();
+            OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
            // okHttpClient.interceptors().add(new LoggingInterceptor(),interceptor);
 
 
 
                      //не понимаю что за logger      https://github.com/square/okhttp/wiki/Interceptors
                     //первый вариант вроде без ошибок, но не работает   https://github.com/square/retrofit/issues/1072
-                    okHttpClient.interceptors().add((Interceptor) new LoggingInterceptor());
+//                    okHttpClient.interceptors().add((Interceptor) new LoggingInterceptor());
 
                     //как вариант не знаю почему не работает
                     //okHttpClient.interceptors().add(interceptor);
-            okHttpClient.setSslSocketFactory(sslSocketFactory);
-            okHttpClient.setHostnameVerifier(new HostnameVerifier() {
+            okHttpClientBuilder.sslSocketFactory(sslSocketFactory);
+            okHttpClientBuilder.hostnameVerifier(new HostnameVerifier() {
 
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
@@ -150,8 +121,25 @@ public class Connector {
                         return false;
                 }
             });
-
-            return okHttpClient;
+            okHttpClientBuilder.interceptors().add(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request originalRequest = chain.request();
+                    Request.Builder request= originalRequest.newBuilder();
+                    String cookie = originalRequest.header(COOKIE);
+                    if(cookie!=null && !cookie.trim().isEmpty()) {
+                        cookie = MainActivity.JSESSIONID + "=" + sessionId + ";" + cookie;
+                    } else {
+                        cookie = MainActivity.JSESSIONID + "=" + sessionId + ";";
+                    }
+                    request.addHeader(COOKIE, cookie);
+                    Request build = request.build();
+                    System.out.println("build = " + build);
+                    Response response = chain.proceed(build);
+                    return response;
+                }
+            });
+            return okHttpClientBuilder.build();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
