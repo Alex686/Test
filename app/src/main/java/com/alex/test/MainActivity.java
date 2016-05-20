@@ -47,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 if (text != null && text.size()>1) {
                     isSessionActive[0] = true;
                 }
-                tv.setText(text.toString());
-                System.out.println("!!!Body:" + text);
-
             }
 
             @Override
