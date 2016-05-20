@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +15,8 @@ import retrofit.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tv;
-    private Gson gson = new GsonBuilder().create();
+     public TextView tv;
+    //private Gson gson = new GsonBuilder().create();
 
 
 
@@ -31,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         Connector.GitApiInterface service = Connector.conn();
 
-        Call<Object> sessionInfo = service.getSessionInfo();
+
+        Call<Object> sessionInfo = service.getSessionInfo("ru","globaladmin", "admin");
+        //Call<Object> sessionInfo = service.getSessionInfo();
         sessionInfo.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Response<Object> response) {
@@ -43,15 +42,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + t.getLocalizedMessage());
+                System.out.println("1111111111111111111111111111111111111111111111111111111111111111111" + t.getLocalizedMessage());
+                // t.printStackTrace();
 
             }
         });
         Map<String, String> mapJson = new HashMap<>();
-//        mapJson.put("language", "ru");
+        mapJson.put("language", "ru");
         mapJson.put("username", "globaladmin");
         mapJson.put("password", "admin");
-        Call<Void> call = service.login(mapJson);
+        //Call<Void> login = service.login(mapJson);
 
 
 
@@ -68,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
             tv.setText(e.getLocalizedMessage());
         }
 */
-
-        call.enqueue(new Callback<Void>() {
+       /*   //нужно
+        Call<Object> login = service.login(mapJson);
+        login.enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Response<Void> response) {
-                System.out.println("response = [" + response.headers().toString() + "]");
-                tv.setText(response.headers().toString());
+            public void onResponse(Response<Object> response) {
+                printResponse(response);
+                //не заходит сюда вообще
+                System.out.println("response = [" + response.headers() + "]");
             }
 
             @Override
@@ -83,19 +85,18 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-        });
+        });*/
 
 
     }
 
     private void printResponse(Response<Object> response) {
-
         Log.d("MainActivity", "Status Code = " + response.code());
         if (response.isSuccess()) {
             // request successful (status code 200, 201)
 
-           // Map<String, String> map = gson.fromJson(response.body().toString(), Map.class);
-            System.out.println(response.body().toString());
+            // Map<String, String> map = gson.fromJson(response.body().toString(), Map.class);
+            System.out.println("55555555555555555555"+response.body().toString());
             //tv.setText(response.body().toString());
 /*
             for (Map.Entry e :map.entrySet()) {
@@ -109,6 +110,28 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    private void printVoidResponse(Response<Void> response) {
+        Log.d("MainActivity", "Status Code = " + response.code());
+        if (response.isSuccess()) {
+            // request successful (status code 200, 201)
+
+            // Map<String, String> map = gson.fromJson(response.body().toString(), Map.class);
+            System.out.println("99999999999999999999999999999999999999999999"+response.body().toString());
+            //tv.setText(response.body().toString());
+/*
+            for (Map.Entry e :map.entrySet()) {
+                System.out.println(e.getKey() + " " + e.getValue());
+            }*/
+
+
+        } else {
+            // response received but request not successful (like 400,401,403 etc)
+            //Handle errors
+
+        }
+    }
+
 
 
 }

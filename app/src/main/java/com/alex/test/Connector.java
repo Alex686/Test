@@ -19,12 +19,10 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit.Call;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
+import retrofit.http.Field;
 import retrofit.http.FieldMap;
 import retrofit.http.FormUrlEncoded;
-import retrofit.http.GET;
 import retrofit.http.POST;
-
-//import com.squareup.okhttp.HttpLoggingInterceptor;
 
 
 public class Connector {
@@ -42,11 +40,11 @@ public class Connector {
 
 
 
+
             okClient.interceptors().add(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Response response = chain.proceed(chain.request());
-
                     return response;
                 }
             });
@@ -55,8 +53,8 @@ public class Connector {
                     .baseUrl(URL)
                     .client(okClient)
 
-                    //нащёл в интернете, но куча ошибок https://github.com/square/retrofit/issues/1554
-                    .addConverterFactory(new NullOnEmptyConverterFactory())
+                            //нащёл в интернете, но куча ошибок https://github.com/square/retrofit/issues/1554
+                            //.addConverterFactory(new NullOnEmptyConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -69,13 +67,23 @@ public class Connector {
 
     public interface GitApiInterface {
 
-       @FormUrlEncoded
-       @POST("/reporting/rest/saiku/session")
-       Call<Void> login(@FieldMap Map<String, String> map);
+        @FormUrlEncoded
+        @POST("/reporting/rest/saiku/session")
+        Call<Object> login(@FieldMap Map<String,String> map);
 
+
+
+        @FormUrlEncoded
+        @POST("/reporting/rest/saiku/session")
+        Call<Object> getSessionInfo(@Field("language") String language, @Field("username") String username,@Field("password") String password);
+
+
+
+        /*
+        //работает, просто пока не нужно
         @GET("/reporting/rest/saiku/session")
         Call<Object> getSessionInfo();
-
+*/
 /*
         @Headers("User-Agent: Retrofit2.0Tutorial-App")
         @GET("/search/users")
@@ -125,18 +133,14 @@ public class Connector {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 
-
             OkHttpClient okHttpClient = new OkHttpClient();
-           // okHttpClient.interceptors().add(new LoggingInterceptor(),interceptor);
+            // okHttpClient.interceptors().add((Interceptor) new LoggingInterceptor());
 
-
-
-                     //не понимаю что за logger      https://github.com/square/okhttp/wiki/Interceptors
-                    //первый вариант вроде без ошибок, но не работает   https://github.com/square/retrofit/issues/1072
-                    okHttpClient.interceptors().add((Interceptor) new LoggingInterceptor());
-
-                    //как вариант не знаю почему не работает
-                    //okHttpClient.interceptors().add(interceptor);
+            //не понимаю что за logger      https://github.com/square/okhttp/wiki/Interceptors
+            //первый вариант вроде без ошибок, но не работает   https://github.com/square/retrofit/issues/1072
+            //okHttpClient.interceptors().add((Interceptor) new LoggingInterceptor());
+            //как вариант не знаю почему не работает
+            //okHttpClient.interceptors().add(interceptor);
             okHttpClient.setSslSocketFactory(sslSocketFactory);
             okHttpClient.setHostnameVerifier(new HostnameVerifier() {
 

@@ -8,13 +8,15 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import okio.Buffer;
 
 
 //https://github.com/square/retrofit/issues/1072#
 
-public class LoggingInterceptor implements Interceptor {
+public class LoggingInterceptor extends MainActivity implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
@@ -36,16 +38,35 @@ public class LoggingInterceptor implements Interceptor {
 
         String bodyString = response.body().string();
 
-        Log.d("TAG", "response log2222222" + "\n" + responseLog + "\n" + "response body1111111111" + bodyString);
+        //эта печать работает просто пока не нужна
+        //Log.d("TAG", "response log2222222" + "\n" + responseLog + "\n" + "response body1111111111" + response.body().toString());
 
-
-/*
-        //помещение Jsession id в переменную.
         Map<String, List<String>> map = response.headers().toMultimap();
         String setCookie = map.get("Set-Cookie").toString();
-        String Jsessionid = setCookie.substring(12, 44);
-        System.out.println("JSESSIONID: " + Jsessionid);
+        // List<String> map = response.headers("Set-Cookie");
+        String Jsesionid = setCookie.substring(12, 44);
+
+
+
+
+        // TextView rrerere = (TextView) findViewById(R.id.rrerere);
+        //rrerere.setText(setCookie);
+
+      /* не работает
+        MainActivity mainActivity = new MainActivity();
+        TextView textView = mainActivity.tv;
+        textView.setText(Jsesionid);
+        */
+        System.out.println("JSESSIONID: "+ Jsesionid);
+
+        /*
+        //печать мапы с ключом и всем что нужно
+        for (Map.Entry e :map.entrySet()) {
+            System.out.println("KEYKEYKEYKEYKEY:"+e.getKey() + "ENDKEYENDKEYENDKEY " + e.getValue());
+        }
 */
+
+
 
 
 
