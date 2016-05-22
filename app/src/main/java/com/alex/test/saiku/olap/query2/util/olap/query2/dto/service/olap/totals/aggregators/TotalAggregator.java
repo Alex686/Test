@@ -1,0 +1,87 @@
+package com.alex.test.saiku.olap.query2.util.olap.query2.dto.service.olap.totals.aggregators;
+
+import org.olap4j.Cell;
+import org.olap4j.metadata.Measure;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+//import mondrian.util.Format;
+
+public abstract class TotalAggregator {
+  private static final Map<String, TotalAggregator> all;
+
+  static {
+    Map<String, TotalAggregator> tmp = new HashMap<>();
+    //tmp.put( "sum", new SumAggregator( null ) );
+    //tmp.put( "max", new MaxAggregator( null ) );
+    //tmp.put( "min", new MinAggregator( null ) );
+    //tmp.put( "avg", new AvgAggregator( null ) );
+    all = Collections.unmodifiableMap( tmp );
+  }
+
+  private String formattedValue;
+ /*
+  final Format format;
+
+  TotalAggregator(Format format) {
+    this.format = format;
+  }
+*/
+  public void addData( Cell cell ) {
+    try {
+      // FIXME - maybe we should try to do fetch the format here, but seems to cause some issues? infinite loop? make
+      // sure we try this only once to override existing format?
+      //		if (format == null) {
+      //			String formatString = (String) cell.getPropertyValue(Property.StandardCellProperty.FORMAT_STRING);
+      //			this.format = Format.get(formatString, SaikuProperties.locale);
+      //
+      //		}
+      Object value = cell.getValue();
+      if ( value instanceof Number ) {
+        double doubleVal;
+
+        doubleVal = cell.getDoubleValue();
+        addData( doubleVal );
+      }
+    } catch ( Exception e ) {
+      throw new RuntimeException( e );
+    }
+
+  }
+
+  protected abstract void addData( double data );
+
+  protected abstract Double getValue();
+
+  public abstract TotalAggregator newInstance(  Measure measure );
+
+  public String getFormattedValue() {
+    if ( formattedValue != null ) {
+      return formattedValue;
+    } else {
+      Double value = getValue();
+      if ( value != null ) {
+
+      }
+      return "";
+    }
+  }
+
+  public void setFormattedValue( String formattedValue ) {
+    this.formattedValue = formattedValue;
+  }
+
+  public TotalAggregator newInstance() {
+    return newInstance( "" );
+  }
+
+  private TotalAggregator newInstance(String formatString) {
+    return null;
+  }
+
+  public static TotalAggregator newInstanceByFunctionName( final String functionName ) {
+    return all.get( functionName );
+  }
+}
