@@ -22,29 +22,24 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-    compile 'com.squareup.retrofit:converter-jackson:1.9.0'
     //compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
 
     // http://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     // http://mvnrepository.com/artifact/org.springframework/spring-beans
-    compile group: 'org.springframework', name: 'spring-beans', version: '3.0.5.RELEASE'
+    //compile group: 'org.springframework', name: 'spring-beans', version: '3.0.5.RELEASE'
     // http://mvnrepository.com/artifact/org.springframework/spring-jdbc
-    compile group: 'org.springframework', name: 'spring-jdbc', version: '2.0.6'
+    //compile group: 'org.springframework', name: 'spring-jdbc', version: '2.0.6'
     // http://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto
-    compile group: 'org.springframework.security', name: 'spring-security-crypto', version: '3.1.0.RELEASE'
+    // compile group: 'org.springframework.security', name: 'spring-security-crypto', version: '3.1.0.RELEASE'
     // http://mvnrepository.com/artifact/org.springframework/spring-jdbc
-    compile group: 'org.springframework', name: 'spring-jdbc', version: '2.0.6'
+    //compile group: 'org.springframework', name: 'spring-jdbc', version: '2.0.6'
     // http://mvnrepository.com/artifact/javax.servlet/servlet-api
-    compile group: 'javax.servlet', name: 'servlet-api', version: '2.3'
+    // compile group: 'javax.servlet', name: 'servlet-api', version: '2.3'
     // http://mvnrepository.com/artifact/javax.persistence/persistence-api
-    compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
-    compile 'org.olap4j:olap4j:1.2.0'
+    //compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+    //compile 'org.olap4j:olap4j:1.2.0'
     // http://mvnrepository.com/artifact/commons-lang/commons-lang
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     // http://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
@@ -52,6 +47,12 @@ dependencies {
     // http://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4'
     // http://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    //compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
 
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    compile 'com.squareup.retrofit:converter-jackson:1.9.0'
+    compile 'com.android.support:design:23.2.1'
 }

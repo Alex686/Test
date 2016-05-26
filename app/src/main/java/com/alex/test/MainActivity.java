@@ -2,9 +2,12 @@ package com.alex.test;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.FileInputStream;
@@ -26,17 +29,27 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv;
 
 
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tv = (TextView) findViewById(R.id.tv);
+        Button jcr = (Button) findViewById(R.id.button);
+
         final String[] sessionId = getSessionId();
 
-        System.out.println("!!!" + sessionId[0]);
+        //System.out.println("!!!" + sessionId[0]);
         Connector.GitApiInterface service = Connector.conn(sessionId[0]);
+        assert jcr != null;
+        jcr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, JCR_Activity.class);
+                startActivity(intent);
+
+            }
+        });
 
         Call<Map<String, Object>> sessionInfo = service.getSessionInfo();
         final boolean[] isSessionActive = {false};
@@ -49,9 +62,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+
+
             @Override
             public void onFailure(Call<Map<String, Object>> string, Throwable t) {
-                System.out.println("!!!" + t.getLocalizedMessage());
+                //System.out.println("!!!" + t.getLocalizedMessage());
 
             }
         });
