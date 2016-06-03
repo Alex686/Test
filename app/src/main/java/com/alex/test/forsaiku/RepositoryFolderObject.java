@@ -1,5 +1,6 @@
 package com.alex.test.forsaiku;
 
+import com.alex.test.R;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,14 +20,18 @@ public class RepositoryFolderObject implements IRepositoryObject {
     private String path;
     private List<IRepositoryObject> repoObjects;
     private List<AclMethod> acl;
+    private int image;
 
     public RepositoryFolderObject(String name, String id, String path, List<AclMethod> acl, List<IRepositoryObject> repoObjects) {
         this.type = Type.FOLDER;
         this.name = name;
         this.id = id;
         this.path = path;
+        //this.repoObjects = repoObjects;
         this.repoObjects = repoObjects;
         this.acl = acl;
+        this.image = image;
+
     }
     public Type getType() {
         return type;
@@ -40,6 +45,11 @@ public class RepositoryFolderObject implements IRepositoryObject {
         return id;
     }
 
+    @Override
+    public int getimage() {
+        return R.drawable.folder;
+    }
+
     public String getPath() {
         return path;
     }
@@ -47,6 +57,7 @@ public class RepositoryFolderObject implements IRepositoryObject {
     public List<AclMethod> getAcl() {
         return acl;
     }
+
 
     @JsonProperty
     public List<IRepositoryObject> getRepoObjects() {
@@ -75,6 +86,10 @@ public class RepositoryFolderObject implements IRepositoryObject {
 
     public void setAcl(List<AclMethod> acl) {
         this.acl = acl;
+    }
+
+    public void setImage(int image) {
+        this.image =image;
     }
 
     @Override

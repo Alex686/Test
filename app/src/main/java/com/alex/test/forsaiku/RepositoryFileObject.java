@@ -1,7 +1,9 @@
 package com.alex.test.forsaiku;
 
-import java.util.List;
+import com.alex.test.R;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class RepositoryFileObject implements IRepositoryObject {
 
@@ -11,6 +13,9 @@ public class RepositoryFileObject implements IRepositoryObject {
     private final String filetype;
     private final String path;
     private final List<AclMethod> acl;
+    private int image;
+
+
 
     public RepositoryFileObject(String filename, String id, String filetype, String path, List<AclMethod> acl) {
         this.type = Type.FILE;
@@ -18,7 +23,9 @@ public class RepositoryFileObject implements IRepositoryObject {
         this.id = id;
         this.filetype = filetype;
         this.path = path;
+        this.image = image;
         this.acl = acl;
+
 
     }
     public Type getType() {
@@ -40,7 +47,18 @@ public class RepositoryFileObject implements IRepositoryObject {
     public String getId() {
         return id;
     }
-    public List<AclMethod> getAcl() {
-        return acl;
+
+    @Override
+    public int getimage() {
+           return R.drawable.file_document;
+           //return image;
     }
+
+    @Override
+    public ArrayList<IRepositoryObject> getRepoObjects() {
+        return null;
+    }
+    /*public List<AclMethod> getAcl() {
+        return acl;
+    }*/
 }

@@ -1,18 +1,19 @@
 package com.alex.test;
 
-import android.annotation.TargetApi;
-import android.app.ProgressDialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import com.alex.test.forsaiku.AclMethod;
+import com.alex.test.forsaiku.IRepositoryObject;
+import com.alex.test.forsaiku.RepositoryFileObject;
+import com.alex.test.forsaiku.RepositoryFolderObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class JCR_Activity extends AppCompatActivity {
 
@@ -22,14 +23,133 @@ public class JCR_Activity extends AppCompatActivity {
     public static final String uid = UUID.randomUUID().toString();
     //public static final String uid = "1464289742695" 13;
 
+    List<IRepositoryObject> iRepositoryObjects = new ArrayList<>();//содержимое основной директории
+   /* ArrayList<IRepositoryObject> iRepositoryObjects2 = new ArrayList<IRepositoryObject>();
+    ArrayList<IRepositoryObject> iRepositoryObjects3 = new ArrayList<IRepositoryObject>();
+    ArrayList<IRepositoryObject> iRepositoryObjects4 = new ArrayList<IRepositoryObject>();*/
+    ListAdapter listAdapter;
+    ListAdapter listAdapter2;
+    String list, list2;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jcr_);
-        final String[] sessionId = getSessionId();
 
+
+        List<IRepositoryObject> repoObjects1 = new ArrayList<>();//содержимое первой паки
+        List<IRepositoryObject> repoObjects2 = new ArrayList<>();//содержимое второй пакм
+        List<IRepositoryObject> repoObjects3 = new ArrayList<>();//содержимое третьей папки
+
+        List<AclMethod> aclMethodArrayList = new ArrayList<AclMethod>();
+        AclMethod acl1 = AclMethod.GRANT;
+        AclMethod acl2 = AclMethod.READ;
+        aclMethodArrayList.add(acl1);
+        aclMethodArrayList.add(acl2);
+
+               IRepositoryObject file = new RepositoryFileObject("file1","1","type","/folder1",aclMethodArrayList);
+        IRepositoryObject file2 = new RepositoryFileObject("file2","2","type","/folder1",aclMethodArrayList);
+        IRepositoryObject file3 = new RepositoryFileObject("file3","3","type","/folder2",aclMethodArrayList);
+        IRepositoryObject file4 = new RepositoryFileObject("file4","4","type","/folder2",aclMethodArrayList);
+        IRepositoryObject file5 = new RepositoryFileObject("file5","5","type","/folder3",aclMethodArrayList);
+        IRepositoryObject file6 = new RepositoryFileObject("file6","6","type","/folder3",aclMethodArrayList);
+        IRepositoryObject file7 = new RepositoryFileObject("file7","7","type","/folder3",aclMethodArrayList);
+        IRepositoryObject file8 = new RepositoryFileObject("file8","8","type","/folder3",aclMethodArrayList);
+        IRepositoryObject file9 = new RepositoryFileObject("file9","9","type","/folder3",aclMethodArrayList);
+
+
+        IRepositoryObject folder2 = new RepositoryFolderObject("folder2","2","forsaiku/folder1", aclMethodArrayList,repoObjects2);
+        IRepositoryObject folder1 = new RepositoryFolderObject("folder1","1","forsaiku/", aclMethodArrayList,repoObjects1);
+        IRepositoryObject folder3 = new RepositoryFolderObject("folder3","3","forsaiku/", aclMethodArrayList,repoObjects3);
+
+
+
+
+
+        repoObjects1.add(file);
+        repoObjects1.add(file2);
+        repoObjects1.add(file6);
+        repoObjects1.add(file7);
+        repoObjects1.add(file8);
+        repoObjects1.add(folder2);
+        repoObjects2.add(file3);
+        repoObjects2.add(file4);
+        repoObjects3.add(file5);
+
+
+        iRepositoryObjects.add(folder1);
+        iRepositoryObjects.add(folder3);
+        iRepositoryObjects.add(file9);
+
+        listAdapter = new ListAdapter(this, (ArrayList<IRepositoryObject>) iRepositoryObjects);
+       // listAdapter2 = new ListAdapter(this,repoObjects1);
+
+
+        // настраиваем список
+        final ListView lvMain = (ListView) findViewById(R.id.listView);
+        assert lvMain != null;
+        lvMain.setAdapter(listAdapter);
+        //setListAdapter(listAdapter);
+
+
+        lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() { //7
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                listAdapter.clickOnItem(position); //8
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
+                final String[] sessionId = getSessionId();
 
         final ProgressDialog dialog = ProgressDialog.show(this, "", "loading...");
         JCR_Reques.JCRInterface service = JCR_Reques.getJcrInterface(sessionId[0]);
@@ -104,7 +224,9 @@ public class JCR_Activity extends AppCompatActivity {
             e.printStackTrace();
         }
         return sessionId;
+        */
     }
+
 }
 
 
