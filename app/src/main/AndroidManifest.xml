@@ -3,6 +3,7 @@
     package="com.alex.test">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -10,7 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Login.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +22,9 @@
             android:name=".JCR"
             android:label="@string/title_activity_jcr"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".JCR_Activity"></activity>
+        <activity android:name=".Repository.JCR_Activity" />
+        <activity android:name=".Menu.Menu" />
+        <activity android:name=".History.History"></activity>
     </application>
 
 </manifest>

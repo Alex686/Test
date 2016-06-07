@@ -1,4 +1,4 @@
-package com.alex.test;
+package com.alex.test.Jackson;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;

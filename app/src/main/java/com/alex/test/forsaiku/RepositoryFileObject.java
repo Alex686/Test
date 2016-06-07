@@ -58,7 +58,7 @@ public class RepositoryFileObject implements IRepositoryObject {
     public ArrayList<IRepositoryObject> getRepoObjects() {
         return null;
     }
-    /*public List<AclMethod> getAcl() {
+    public List<AclMethod> getAcl() {
         return acl;
-    }*/
+    }
 }

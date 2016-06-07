@@ -1,4 +1,4 @@
-package com.alex.test;
+package com.alex.test.Repository;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.alex.test.R;
 import com.alex.test.forsaiku.IRepositoryObject;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.List;
 
 
 public class ListAdapter extends BaseAdapter {
+    IRepositoryObject iRepositoryhistory;//содержимое директории истории
+
 
 
 
@@ -61,6 +64,7 @@ public class ListAdapter extends BaseAdapter {
         return 0;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
@@ -92,6 +96,7 @@ public class ListAdapter extends BaseAdapter {
 
         IRepositoryObject i = hierarchyArray.get(position).item;
         if (i.getType() == IRepositoryObject.Type.FOLDER) {
+            iRepositoryhistory =i;
             if (!closeItem(i)) // 1
                 openItems.add(i);
 
@@ -99,6 +104,8 @@ public class ListAdapter extends BaseAdapter {
             notifyDataSetChanged();
         } else
         {
+            iRepositoryhistory =i ;
+
             // TODO: 02.06.2016  
             return;
         }

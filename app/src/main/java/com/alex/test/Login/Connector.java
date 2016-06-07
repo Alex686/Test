@@ -1,12 +1,9 @@
-package com.alex.test;
+package com.alex.test.Login;
 
 
 import android.annotation.SuppressLint;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.alex.test.Jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -20,6 +17,10 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.http.FieldMap;

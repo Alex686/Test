@@ -1,10 +1,14 @@
-package com.alex.test;
+package com.alex.test.Repository;
 
 import android.annotation.SuppressLint;
+
+import com.alex.test.Jackson.JacksonConverterFactory;
+import com.alex.test.Login.MainActivity;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -57,6 +61,9 @@ public class JCR_Reques {
 
         @GET("/reporting/rest/saiku/api/repository")
         Call<Void> getJCR(@Query("type") String TYPE,@Query("_") String UID);
+
+        @GET("/reporting/rest/saiku/session")
+        Call<Map<String, Object>> getSessionInfo();
 
 
     }
